@@ -88,7 +88,7 @@ public class CustomAIConnector extends AIConnector {
         .setDefaultValue("https://api.openai.com/v1/"));
     
     final String apiKeyExtraInfo = new StringBuilder()
-        .append("For OAuth Client Credentials authentication, ensure the following environment variables are set:\n")
+        .append("For OAuth Client Credentials authentication, ensure the following environment variables or system properties are set:\n")
         .append("    - ").append(AccessTokenProvider.AUTH_DOMAIN).append( ": The domain for the authorization server (e.g., 'example-123abc.us.auth0.com').\n")
         .append("    - ").append(AccessTokenProvider.CLIENT_ID).append( ": The ID of the requesting client.\n")
         .append("    - ").append(AccessTokenProvider.CLIENT_SECRET).append( ": The secret of the client.\n")
@@ -98,7 +98,7 @@ public class CustomAIConnector extends AIConnector {
         .toString();
     
     params.add(new PasswordTextFieldConnectorParam(AI_KEY_PARAM_ID, "API key:", null)
-        .setInfo("If you do not specify an API key, the environment variables will be used to authenticate using OAuth Client Credentials Flow.")
+        .setInfo("If you do not specify an API key, the environment variables or system properties will be used to authenticate using OAuth Client Credentials Flow.")
         .setExtraInfo(apiKeyExtraInfo));
     
     params.add(new TextFieldConnectorParam(MODEL_PARAM_ID, "Model:", null).setDefaultValue("gpt-4o"));
