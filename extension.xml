@@ -1,0 +1,39 @@
+<xt:extension xmlns:xt="http://www.oxygenxml.com/ns/extension"
+    id="oxygen-ai-positron-custom-connector-addon">
+    <xt:location href="${project.artifactId}-${project.nosnapshot.version}-plugin.jar"/>
+    <xt:version>${project.nosnapshot.version}</xt:version>
+    
+    <!-- Should be the same with the SDK from the Maven dependencies. -->
+    <xt:oxy_version>27.1+</xt:oxy_version>
+    <xt:type>plugin</xt:type>
+    <xt:author>Syncro Soft</xt:author>
+    <xt:name>${project.name}</xt:name>
+    <xt:description>
+      <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <title>${project.name}</title>
+        </head>
+        <body>
+            <h1>${project.name}</h1>
+            <div>
+                <p>${project.description}</p>
+            </div>
+        </body>
+      </html>
+    </xt:description>
+  <xt:license><![CDATA[ Copyright 2025 Syncro Soft SRL
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+]]></xt:license>
+
+</xt:extension>

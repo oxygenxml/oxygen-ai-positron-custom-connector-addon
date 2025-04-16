@@ -1,0 +1,42 @@
+=========================================================================
+==  NOTICE file corresponding to the section 4 d of                    ==
+==  the Apache License, Version 2.0,                                   ==
+==  in this case for the oxygen-ai-positron-custom-connector-addon distribution.==
+=========================================================================
+This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
+
+okhttp-4.12.0.jar
+Site: https://square.github.io/okhttp/
+License: Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+
+okio-3.6.0.jar
+Site: https://github.com/square/okio/
+License: Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+
+Converter-Jackson-2.11.0.jar
+Site: https://github.com/square/retrofit
+License: Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+
+Retrofit-2.11.0.jar
+Site: https://github.com/square/retrofit
+License: Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+
+Kotlin-Stdlib-Common-1.9.10.jar
+Site: https://kotlinlang.org/
+License: Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+
+Kotlin-Stdlib-Jdk7-1.8.21.jar
+Site: https://kotlinlang.org/
+License: Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+
+Kotlin-Stdlib-Jdk8-1.8.21.jar
+Site: https://kotlinlang.org/
+License: Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+
+Kotlin-Stdlib-1.8.21.jar
+Site: https://kotlinlang.org/
+License: Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+
+IntelliJ-IDEA-Annotations-13.0.jar
+Site: http://www.jetbrains.org
+License: Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
