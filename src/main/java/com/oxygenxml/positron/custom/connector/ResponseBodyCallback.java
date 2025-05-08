@@ -93,14 +93,11 @@ public class ResponseBodyCallback<T> implements Callback<ResponseBody> {
 
     try { // NOSONAR
       if (!response.isSuccessful()) {
-        HttpException httpException = new HttpException(response);
-        if (LOGGER.isDebugEnabled()) {
-          LOGGER.debug("\n\tExceptions message is: " + httpException.getMessage());
-        }
-
-        AIConnectionException processHttpException = AiServiceUtil.processHttpException(httpException);
+        AIConnectionException processHttpException = AiServiceUtil.processHttpException(new HttpException(response));
         String errorMesssage = processHttpException.getMessage();
-
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("\n\tError message is: " + errorMesssage);
+        }
         throw new AIConnectionException(errorMesssage, "", processHttpException);
       }
 

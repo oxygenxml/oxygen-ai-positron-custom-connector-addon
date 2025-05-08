@@ -97,10 +97,11 @@ public class AiServiceUtil {
         }
         if (!response.isSuccessful()) {
           HttpException httpException = new HttpException(response);
+          AIConnectionException aiConnectionException = AiServiceUtil.processHttpException(httpException);
           if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("\n\tExceptions message is: " + httpException.getMessage());
+            LOGGER.debug("\n\tError message is: " + aiConnectionException.getMessage());
           }
-          throw AiServiceUtil.processHttpException(httpException);
+          throw aiConnectionException;
         }
         return response.body();
       } catch (IOException e) {
@@ -120,6 +121,8 @@ public class AiServiceUtil {
     if (e.response() != null && e.response().errorBody() != null) {
       try {
         String errorBody = e.response().errorBody().string();
+        aiException = new AIConnectionException(errorBody, String.valueOf(e.code()), e);
+
         AIError error = mapper.readValue(errorBody, AIError.class);
         Optional<String> errorMessage = error.getErrorMessage();
         aiException = new AIConnectionException(
