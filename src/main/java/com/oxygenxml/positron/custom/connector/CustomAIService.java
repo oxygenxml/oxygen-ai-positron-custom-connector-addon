@@ -168,6 +168,7 @@ public class CustomAIService implements AIService {
     builder = AiServiceUtil.configureProxy(builder, baseUrl, proxyProvider);
 
     if (token != null && !token.isBlank()) {
+      LOGGER.debug("Found API key in preferences page");
       builder = builder.addInterceptor(chain -> {
         Request request = chain.request();
         Request newRequest = request.newBuilder().addHeader(AUTHORIZATION_HEADER_NAME, "Bearer " + token).build();

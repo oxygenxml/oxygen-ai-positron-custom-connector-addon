@@ -17,6 +17,9 @@ package com.oxygenxml.positron.custom.connector.auth;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oxygenxml.positron.api.connector.ProxyProvider;
@@ -33,6 +36,11 @@ import okhttp3.Response;
  * This class interacts with an OAuth2.0 provider to fetch tokens using client credentials.
  */
 public class AccessTokenProvider  {
+  /**
+   * Logger for logging.
+   */
+  private static final Logger LOGGER = LoggerFactory.getLogger(AccessTokenProvider.class.getName());
+
   
   /**
    * Client id to use when performing authentication.
@@ -103,12 +111,12 @@ public class AccessTokenProvider  {
    * @throws AuthRequestException If any required parameter is missing or the request fails.
    */
   public void loadAuthenticationToken() throws AuthRequestException {
+    LOGGER.debug("Loading access token using client credentials");
     String authDomain = getProperty(AUTH_DOMAIN);
     if(authDomain == null) {
       throw getAuthRequestExceptionForMissingParameter(AUTH_DOMAIN);
     }
     String clientId = getProperty(CLIENT_ID);
-    System.out.println("clientId " + clientId);
     if(clientId == null) {
       throw getAuthRequestExceptionForMissingParameter(CLIENT_ID);
     }
@@ -148,6 +156,7 @@ public class AccessTokenProvider  {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(responseContent);
         setAccessToken(rootNode.path("access_token").asText());
+        LOGGER.debug("Access token successfully obtained");
       } else {
         throw new AuthRequestException("Auth request failed with status: " + response.code() + "; message: " + response.message());
       }
