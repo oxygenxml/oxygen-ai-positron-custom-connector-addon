@@ -167,7 +167,7 @@ public class CustomAIService implements AIService {
 
     builder = AiServiceUtil.configureProxy(builder, baseUrl, proxyProvider);
 
-    if (token != null && !token.isBlank()) {
+    if (token != null && !token.isBlank() && !token.equals("null")) {
       LOGGER.debug("Found API key in preferences page");
       builder = builder.addInterceptor(chain -> {
         Request request = chain.request();
