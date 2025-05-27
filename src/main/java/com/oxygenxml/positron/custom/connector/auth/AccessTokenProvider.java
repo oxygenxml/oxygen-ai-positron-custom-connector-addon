@@ -156,16 +156,20 @@ public class AccessTokenProvider  {
 
     // Execute the request and get the response
     try (Response response = client.newCall(request).execute()) {
-      String responseContent = response.body().string();
       if (response.isSuccessful()) {
+        String responseContent = response.body().string();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(responseContent);
         setAccessToken(rootNode.path("access_token").asText());
         LOGGER.debug("Access token successfully obtained");
       } else {
-        LOGGER.debug("Auth request failed with status: " + response.code() + "; message: " + responseContent);
+        String errorMessage = "";
+        if(response.body() != null) {
+          errorMessage = response.body().toString();
+        }
+        LOGGER.debug("Auth request failed with status: " + response.code() + "; message: " + errorMessage);
 
-        throw new AuthRequestException("Auth request failed with status: " + response.code() + "; message: " + responseContent);
+        throw new AuthRequestException("Auth request failed with status: " + response.code() + "; message: " + errorMessage);
       }
     } catch (IOException e) {
       LOGGER.debug(e.getMessage());
