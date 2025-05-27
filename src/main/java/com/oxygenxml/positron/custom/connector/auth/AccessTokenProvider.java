@@ -142,25 +142,33 @@ public class AccessTokenProvider  {
     if(organization != null) {
       formBodyBuilder.add("organization", organization);
     }
-    // Create the request
+    FormBody body = formBodyBuilder.build();
+    LOGGER.debug("Sending request to: " + requestUrl);
+    LOGGER.debug("Request Form Body: ");
+    for (int i = 0; i < body.size(); i++) {
+        LOGGER.debug("\t" + body.name(i) + " = " + body.value(i));
+    }
     Request request = new Request.Builder()
             .url(requestUrl)
-            .post(formBodyBuilder.build())
+            .post(body)
             .addHeader("content-type", "application/x-www-form-urlencoded")
             .build();
 
     // Execute the request and get the response
     try (Response response = client.newCall(request).execute()) {
+      String responseContent = response.body().string();
       if (response.isSuccessful()) {
-        String responseContent = response.body().string();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(responseContent);
         setAccessToken(rootNode.path("access_token").asText());
         LOGGER.debug("Access token successfully obtained");
       } else {
-        throw new AuthRequestException("Auth request failed with status: " + response.code() + "; message: " + response.message());
+        LOGGER.debug("Auth request failed with status: " + response.code() + "; message: " + responseContent);
+
+        throw new AuthRequestException("Auth request failed with status: " + response.code() + "; message: " + responseContent);
       }
     } catch (IOException e) {
+      LOGGER.debug(e.getMessage());
       throw new AuthRequestException(e.getMessage());
     }
   }
