@@ -166,6 +166,8 @@ public class AccessTokenProvider  {
         String errorMessage = "";
         if(response.body() != null) {
           errorMessage = response.body().toString();
+        } else {
+          errorMessage = response.message();
         }
         LOGGER.debug("Auth request failed with status: " + response.code() + "; message: " + errorMessage);
 
