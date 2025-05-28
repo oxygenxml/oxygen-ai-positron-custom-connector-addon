@@ -165,7 +165,7 @@ public class AccessTokenProvider  {
       } else {
         String errorMessage = "";
         if(response.body() != null) {
-          errorMessage = response.body().toString();
+          errorMessage = response.body().string();
         } else {
           errorMessage = response.message();
         }
