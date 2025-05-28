@@ -142,15 +142,10 @@ public class AccessTokenProvider  {
     if(organization != null) {
       formBodyBuilder.add("organization", organization);
     }
-    FormBody body = formBodyBuilder.build();
-    LOGGER.debug("Sending request to: " + requestUrl);
-    LOGGER.debug("Request Form Body: ");
-    for (int i = 0; i < body.size(); i++) {
-        LOGGER.debug("\t" + body.name(i) + " = " + body.value(i));
-    }
+    // Create the request
     Request request = new Request.Builder()
             .url(requestUrl)
-            .post(body)
+            .post(formBodyBuilder.build())
             .addHeader("content-type", "application/x-www-form-urlencoded")
             .build();
 
@@ -170,7 +165,6 @@ public class AccessTokenProvider  {
           errorMessage = response.message();
         }
         LOGGER.debug("Auth request failed with status: " + response.code() + "; message: " + errorMessage);
-
         throw new AuthRequestException("Auth request failed with status: " + response.code() + "; message: " + errorMessage);
       }
     } catch (IOException e) {
