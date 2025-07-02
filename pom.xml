@@ -41,6 +41,13 @@
     <target.jre.version>11</target.jre.version>
   </properties>
   
+  <repositories>
+    <repository>
+        <id>oxygen-public-repo</id>
+        <url>https://www.oxygenxml.com/maven/</url>
+    </repository>
+  </repositories>
+  
   <dependencies>
     <dependency>
       <groupId>com.oxygenxml</groupId>
