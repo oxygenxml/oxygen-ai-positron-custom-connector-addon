@@ -18,6 +18,13 @@
             <div>
                 <p>${project.description}</p>
             </div>
+            <div>
+              <h2>Release Notes 1.0.1</h2>
+                <ol>
+                  <li><b>Improved Error Handling for AI Requests</b> – Enhanced the way errors are detected and presented when making HTTP requests to the AI service.</li>
+	                <li><b>Enhanced Debug Logging</b> – Debug logs now include additional context, making it easier for developers to troubleshoot issues.</li>
+                </ol>
+            </div>
         </body>
       </html>
     </xt:description>
