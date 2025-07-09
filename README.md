@@ -26,7 +26,8 @@ When the **Custom AI Service** connector is selected in the "AI Service Configur
 * Address: The web address of the Custom AI service. By default is: https://api.openai.com/v1
 
 * API key: The API key necessary to work with the connector. If you do not specify an API key, the add-on will try to use environment variables to authenticate using OAuth Client Credential flow. These are the env variables that should be specified: 
-    * POSITRON_CONNECTOR_AUTH_DOMAIN: The domain for the authorization server (e.g., 'example-123abc.us.auth0.com').
+    * POSITRON_CONNECTOR_AUTH_DOMAIN: The domain for the authorization server (e.g., 'example-123abc.us.auth0.com'). 
+    This is not required if POSITRON_CONNECTOR_AUTH_REQUEST_URL is defined.
     * POSITRON_CONNECTOR_AUTH_CLIENT_ID: The ID of the requesting client.
     * POSITRON_CONNECTOR_AUTH_CLIENT_SECRET: The secret of the client.
     * POSITRON_CONNECTOR_AUTH_AUDIENCE: The audience for the token, typically the API or service you're accessing. Optional.
