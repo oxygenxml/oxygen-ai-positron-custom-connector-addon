@@ -31,6 +31,10 @@ When the **Custom AI Service** connector is selected in the "AI Service Configur
     * POSITRON_CONNECTOR_AUTH_CLIENT_SECRET: The secret of the client.
     * POSITRON_CONNECTOR_AUTH_AUDIENCE: The audience for the token, typically the API or service you're accessing. Optional.
     * POSITRON_CONNECTOR_AUTH_ORGANIZATION: The organization name or identifier. Optional.
+    * POSITRON_CONNECTOR_AUTH_SCOPE: The OAuth 2.0 scope to request when generating the access token. Optional.
+    * POSITRON_CONNECTOR_AUTH_TOKEN_URL: Full URL to the token endpoint used to obtain the access token. When this variable is defined, it overrides the default behavior and is used directly for the OAuth token request. Example: *https://your-okta-domain.com/oauth2/abc123/v1/token*.
+    If this variable is not set, the request URL is constructed automatically using the following pattern: *https://<POSITRON_CONNECTOR_AUTH_DOMAIN>/oauth/token*
+    
     
 Here you can find more information about how you can find these values in Auth0: [Auth0 Client Credentials Flow Parameters](https://auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow/call-your-api-using-the-client-credentials-flow#parameters)
 * Model: The model to use.
