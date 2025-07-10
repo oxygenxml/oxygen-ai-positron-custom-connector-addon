@@ -39,8 +39,9 @@ public class LoggerUtil {
    * @return The filtered request body
    */
   public static String filterMessagesFromRequestBody(String requestBody) {
-    String ret = requestBody.replaceAll("\"input\"\\s*:\\s*\"[^\"]*\"", "\"input\":\" **FILTERED_CONTENT** \"");
-    ret = ret.replaceAll("\"messages\"\\s*:\\s*\\[[^\\]]*\\]", "\"messages\":[ **FILTERED_CONTENT** ]");
-    return ret.replaceAll("\"content\"\\s*:\\s*\"[^\"]*\"", "\"content\":\" **FILTERED_CONTENT** \"");
+//    String ret = requestBody.replaceAll("\"input\"\\s*:\\s*\"[^\"]*\"", "\"input\":\" **FILTERED_CONTENT** \"");
+//    ret = ret.replaceAll("\"messages\"\\s*:\\s*\\[[^\\]]*\\]", "\"messages\":[ **FILTERED_CONTENT** ]");
+//    return ret.replaceAll("\"content\"\\s*:\\s*\"[^\"]*\"", "\"content\":\" **FILTERED_CONTENT** \"");
+    return requestBody;
   }
 }
