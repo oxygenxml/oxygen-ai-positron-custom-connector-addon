@@ -54,14 +54,8 @@ public class RequestLoggingInterceptor implements Interceptor {
           if (request.body() != null) {
             request.body().writeTo(requestBuffer);
           }
-          log.debug("--> Sending request to: {};\n\t Request body: {};", request.url(),
-              LoggerUtil.filterMessagesFromRequestBody(requestBuffer.readUtf8()));
-          StringBuilder headersString = new StringBuilder();
-          request.headers().forEach( p -> {
-            headersString.append("\n");
-            headersString.append(p.component1()).append(":").append(p.component2());
-          });
-          log.debug("\n\t Headers: {} ", headersString.toString());
+          log.debug("--> Sending request to: {};\n\t Request body: {};\n\t Headers names: {} ", request.url(),
+              LoggerUtil.filterMessagesFromRequestBody(requestBuffer.readUtf8()), request.headers().names());
 
         }
       }
