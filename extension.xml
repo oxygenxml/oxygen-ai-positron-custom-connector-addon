@@ -18,6 +18,13 @@
             <div>
                 <p>${project.description}</p>
             </div>
+             <div>
+              <h2>Release Notes 1.0.2</h2>
+                <ol>
+                  <li><b>Flexible OAuth2 Token Endpoint Configuration</b> – You can now fully configure the OAuth2 token endpoint using the POSITRON_CONNECTOR_AUTH_TOKEN_URL environment variable, allowing integration with a wider range of authentication servers.</li>
+                  <li><b>Support for OAuth2 Scope</b> – Added support for specifying the OAuth2 scope via the POSITRON_CONNECTOR_AUTH_SCOPE environment variable.</li>
+                </ol>
+            </div>
             <div>
               <h2>Release Notes 1.0.1</h2>
                 <ol>
