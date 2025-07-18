@@ -88,6 +88,7 @@ public class CustomAIConnector extends AIConnector {
    */
   public static final String ALLOW_STREAMING_PARAM_ID = "allow_streaming_param";
   
+  
   /**
    * Pattern for reasoning models
    */
@@ -100,8 +101,16 @@ public class CustomAIConnector extends AIConnector {
   public List<ConnectorParamBase> getParametersList() {
     List<ConnectorParamBase> params = new ArrayList<>();
 
-    params.add(new TextFieldConnectorParam(BASE_URL_PARAM_ID, "Address:", null)
+    params.add(new TextFieldConnectorParam(
+        BASE_URL_PARAM_ID,
+        "Base URL:",
+        "The base URL of your OpenAI-compatible API service. "
+      + "The connector automatically appends paths such as "
+      + "/chat/completions or /moderations when sending API requests. "
+      + "If the Base URL already contains a path (for example ends with /v1/), "
+      + "no additional version segment is added.")
         .setDefaultValue("https://api.openai.com/v1/"));
+
     
     final String apiKeyExtraInfo = new StringBuilder()
         .append("For OAuth Client Credentials authentication, ensure the following environment variables or system properties are set:\n")
