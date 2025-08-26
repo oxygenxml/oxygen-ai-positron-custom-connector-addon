@@ -50,6 +50,51 @@ If your AI service does not require moderation (for example, moderation is alrea
 * Extra query parameters: Extra name/value parameters to set in the query of the AI requests.
 * Extra headers: Extra name/value parameters to set in the headers of the AI requests.
 
+## Positron API overview
+
+The add-on is built on top of the Positron API, which exposes extension points for defining custom AI connectors and services.
+
+### Core concepts
+
+- **`AIConnector`**: Declares a connector that shows up in the Preferences page and wires the UI configuration to an `AIService` implementation.
+  - Defines identity and display name (`getConnectorId`, `getConnectorName`).
+  - Exposes the list of UI parameters (`getParametersList`) so users can configure the service.
+  - Creates the runtime service (`createAIService`) that executes requests.
+  - Optionally adapts outgoing requests (`configureCompletionRequest`).
+
+- **`AIService`**: Encapsulates the logic to call the AI backend (chat completions, moderation, streaming, headers/query params, authentication, proxy, timeouts, etc.).
+
+- **Parameters (`ConnectorParamBase`)**: Typed parameters drive both the Preferences UI and, when relevant, the side-view. Common types used by this add-on:
+  - `TextFieldConnectorParam` (e.g., base URL, model)
+  - `PasswordTextFieldConnectorParam` (e.g., API key)
+  - `CheckBoxConnectorParam` (e.g., moderation, streaming)
+  - `KeyValueTableConnectorParam` (e.g., extra headers, extra query params)
+  - `ModelsComboConnectorParam` (supplies the model combo in Preferences and the side-view)
+
+### How this add-on uses the API
+
+- Declares `CustomAIConnector` (an `AIConnector`) that:
+  - Provides the configuration parameters listed above.
+  - Registers with Positron via the AIConnectors extension point (see [official guide](https://www.oxygenxml.com/doc/ug-addons/topics/ai_positron_enterprise-extending.html#ai_positron_enterprise-extending__dlentry_zgn_lxf_tfc)). The extension implementation returns a list of connectors; this add-on contributes the “Custom AI Service” (see `plugin.xml`).
+  - Constructs a `CustomAIService` using a configuration supplier (base URL, API key or OAuth token, headers, query params, moderation flag).
+  - Adjusts outgoing requests (e.g., disables streaming if the user unchecked it, sets a model) in `configureCompletionRequest`.
+
+### Model combo integration (`ModelsComboConnectorParam`)
+
+Use `ModelsComboConnectorParam` to supply a list of available models. Besides showing in Preferences, it also fuels the model selector in the side-view of the add-on.
+
+```java
+params.add(new ModelsComboConnectorParam(MODEL_PARAM_ID, "Model:", "Choose the model", new Supplier<List<ModelDescriptor>>() {
+  @Override
+  public List<ModelDescriptor> get() {
+    List<ModelDescriptor> models = new ArrayList<>();
+    models.add(new ModelDescriptor("gpt-4.1", "GPT 4.1", "This Gpt 4.1 model"));
+    models.add(new ModelDescriptor("gpt-5", "GPT 5",  "This is GPT 5 model"));
+    return models;
+  }
+}).setDefaultValue("gpt-5"));
+```
+
 Copyright and License
 ---------------------
 Copyright 2025 Syncro Soft SRL.
