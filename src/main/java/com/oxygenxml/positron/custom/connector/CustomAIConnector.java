@@ -38,6 +38,11 @@ import com.oxygenxml.positron.custom.connector.config.CustomAiServiceConfigSuppl
  */
 public class CustomAIConnector extends AIConnector {
   /**
+   * The default model
+   */
+  private static final String DEFAULT_MODEL = "gpt-4.1";
+
+  /**
    * OpenAI connector ID
    */
   public static final String AI_CONNECTOR_ID = "custom-ai-service";
@@ -101,7 +106,19 @@ public class CustomAIConnector extends AIConnector {
         .setInfo("If you do not specify an API key, the environment variables or system properties will be used to authenticate using OAuth Client Credentials Flow.")
         .setExtraInfo(apiKeyExtraInfo));
     
-    params.add(new TextFieldConnectorParam(MODEL_PARAM_ID, "Model:", null).setDefaultValue("gpt-4o"));
+    params.add(new TextFieldConnectorParam(MODEL_PARAM_ID, "Model:", null).setDefaultValue(DEFAULT_MODEL));
+    // Use ModelsComboConnectorParam to supply a list of available models.
+    // Besides showing in Preferences, it also fuels the model selector in the side-view of the add-on.
+//    params.add(new ModelsComboConnectorParam(MODEL_PARAM_ID, "Model:", "Choose the model", new Supplier<List<ModelDescriptor>>() {
+//      @Override
+//      public List<ModelDescriptor> get() {
+//        List<ModelDescriptor> models = new ArrayList<>();
+//        models.add(new ModelDescriptor("gpt-4.1", "GPT 4.1", "This is Gpt 4.1 model"));
+//        models.add(new ModelDescriptor("gpt-5", "GPT 5",  "This is GPT 5 model"));
+//        return models;
+//      }
+//    }).setDefaultValue("gpt-5"));
+    
     
     params.add(new CheckBoxConnectorParam(
         ENABLE_TEXT_MODERATION_PARAM_AI,
@@ -203,7 +220,7 @@ public class CustomAIConnector extends AIConnector {
       if(model != null && !String.valueOf(model).isEmpty()) {
         request.setModel(String.valueOf(model));
       } else {
-        request.setModel("gpt-4o");
+        request.setModel(DEFAULT_MODEL);
       }
     }
 
