@@ -22,6 +22,7 @@
               <h2>Release Notes 1.1.0</h2>
                 <ol>
                   <li><b>OpenAI GPT 5 models</b> – You can now select in the Chat view and use for invoking AI actions or for chat the latest OpenAI GPT-5, GPT-5-mini and GPT-5-nano models.</li>
+                  <li><b>Connector-contributed models in Chat view</b> – You can now browse and select models exposed by the connector directly from the Chat view.</li>
                 </ol>
             </div>
              <div>
