@@ -23,7 +23,7 @@ The add-on can also be installed using the following alternative installation pr
 ## How to use
 When the **Custom AI Service** connector is selected in the "AI Service Configuration" preferences page of the Oxygen AI Positron Assistant Enterprise add-on the following options are available to configure the connector: 
 
-* Address: The web address of the Custom AI service. By default is: https://api.openai.com/v1
+* Address: The web address of the Custom AI service. By default is: https://api.openai.com/v1/
 
 * API key: The API key necessary to work with the connector. If you do not specify an API key, the add-on will try to use environment variables to authenticate using OAuth Client Credential flow. These are the env variables that should be specified: 
     * POSITRON_CONNECTOR_AUTH_DOMAIN: The domain for the authorization server (e.g., 'example-123abc.us.auth0.com').
