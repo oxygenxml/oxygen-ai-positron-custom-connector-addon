@@ -123,7 +123,7 @@ public class CustomAIConnector extends AIConnector {
         List<ModelDescriptor> models = new ArrayList<>();
         models.add(new ModelDescriptor("gpt-5", "GPT 5",  "Latest-generation flagship model designed for complex reasoning and high-accuracy tasks."));
         models.add(new ModelDescriptor("gpt-5-mini", "GPT-5 Mini",  "Smaller GPT-5 variant optimized for cost and speed while maintaining strong quality for common tasks."));
-        models.add(new ModelDescriptor("GPT-5 Nano", "GPT-5 Nano",  "The fastest and most cost-effective GPT-5 variant for lightweight tasks."));
+        models.add(new ModelDescriptor("gpt-5-nano", "GPT-5 Nano",  "The fastest and most cost-effective GPT-5 variant for lightweight tasks."));
         
         models.add(new ModelDescriptor(DEFAULT_MODEL, "GPT 4.1", "Smartest non-reasoning model. It excels at instruction following and tool calling, with broad knowledge across domains.")); 
         models.add(new ModelDescriptor("gpt-4.1-mini", "GPT-4.1 Mini", "Smaller, faster version of GPT-4.1")); 
