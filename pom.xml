@@ -303,13 +303,6 @@
           <testFailureIgnore>false</testFailureIgnore>
         </configuration>
       </plugin>
-       <plugin>
-          <groupId>ro.sync.compliance</groupId>
-          <artifactId>compliance-mvn-dependency-check-to-sbom</artifactId>
-          <configuration>
-            <tags>jira-opa, rocket-raccoons</tags>
-          </configuration>
-        </plugin>
     </plugins>
     
     <pluginManagement>
