@@ -106,9 +106,7 @@ public class CustomAIConnector extends AIConnector {
         "Base URL:",
         "The base URL of your OpenAI-compatible API service. "
       + "The connector automatically appends paths such as "
-      + "/chat/completions or /moderations when sending API requests. "
-      + "If the Base URL already contains a path (for example ends with /v1/), "
-      + "no additional version segment is added.")
+      + "/chat/completions or /moderations when sending API requests.")
         .setDefaultValue("https://api.openai.com/v1/"));
 
     
