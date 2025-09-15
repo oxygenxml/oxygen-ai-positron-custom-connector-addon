@@ -56,7 +56,17 @@ public class AccessTokenProvider  {
    * The domain to use when performing authentication.
    */
   public static final String AUTH_DOMAIN= "POSITRON_CONNECTOR_AUTH_DOMAIN";
-  
+
+  /**
+   * The access token URL to use when performing authentication.
+   */
+  public static final String AUTH_TOKEN_URL= "POSITRON_CONNECTOR_AUTH_TOKEN_URL";
+
+  /**
+   * The scope to use when performing authentication.
+   */
+  public static final String AUTH_SCOPE= "POSITRON_CONNECTOR_AUTH_SCOPE";
+
   /**
    * The audience to use when performing authentication.
    */
@@ -113,9 +123,11 @@ public class AccessTokenProvider  {
   public void loadAuthenticationToken() throws AuthRequestException {
     LOGGER.debug("Loading access token using client credentials");
     String authDomain = getProperty(AUTH_DOMAIN);
-    if(authDomain == null) {
-      throw getAuthRequestExceptionForMissingParameter(AUTH_DOMAIN);
+    String accessTokenUrl = getProperty(AUTH_TOKEN_URL);
+    if(authDomain == null && accessTokenUrl == null) {
+      throw getAuthRequestExceptionForMissingParameter(AUTH_TOKEN_URL + " or " + AUTH_DOMAIN);
     }
+    
     String clientId = getProperty(CLIENT_ID);
     if(clientId == null) {
       throw getAuthRequestExceptionForMissingParameter(CLIENT_ID);
@@ -126,16 +138,25 @@ public class AccessTokenProvider  {
     }
     String audience = getProperty(AUTH_AUDIENCE);
     String organization = getProperty(AUTH_ORGANIZATION);
+    String scope = getProperty(AUTH_SCOPE);
     
     // Create an OkHttpClient
-    String requestUrl = "https://"+ authDomain + "/oauth/token";
+    final String requestUrl;
+    if (accessTokenUrl != null) {
+      requestUrl = accessTokenUrl;
+    } else {
+      requestUrl = "https://" + authDomain + "/oauth/token";
+    }
     OkHttpClient client = createClient(requestUrl);
 
     Builder formBodyBuilder = new FormBody.Builder()
             .add("grant_type", "client_credentials")
             .add("client_id", clientId)
             .add("client_secret", clientSecret);
-    
+
+    if(scope != null) {
+      formBodyBuilder.add("scope", scope);
+    }
     if(audience != null) {
       formBodyBuilder.add("audience", audience);
     }

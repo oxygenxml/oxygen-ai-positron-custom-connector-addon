@@ -17,15 +17,21 @@ package com.oxygenxml.positron.custom.connector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 import com.oxygenxml.positron.api.connector.AIConnector;
 import com.oxygenxml.positron.api.connector.AIService;
 import com.oxygenxml.positron.api.connector.ProxyProvider;
 import com.oxygenxml.positron.api.connector.dto.CompletionRequest;
+import com.oxygenxml.positron.api.connector.dto.Message;
+import com.oxygenxml.positron.api.connector.dto.ModelDescriptor;
 import com.oxygenxml.positron.api.connector.dto.Pair;
+import com.oxygenxml.positron.api.connector.dto.RoleType;
 import com.oxygenxml.positron.api.connector.param.CheckBoxConnectorParam;
 import com.oxygenxml.positron.api.connector.param.ConnectorParamBase;
 import com.oxygenxml.positron.api.connector.param.KeyValueTableConnectorParam;
+import com.oxygenxml.positron.api.connector.param.ModelsComboConnectorParam;
 import com.oxygenxml.positron.api.connector.param.PasswordTextFieldConnectorParam;
 import com.oxygenxml.positron.api.connector.param.TextFieldConnectorParam;
 import com.oxygenxml.positron.custom.connector.auth.AccessTokenProvider;
@@ -37,6 +43,11 @@ import com.oxygenxml.positron.custom.connector.config.CustomAiServiceConfigSuppl
  * @author cosmin_duna
  */
 public class CustomAIConnector extends AIConnector {
+  /**
+   * The default model
+   */
+  private static final String DEFAULT_MODEL = "gpt-4.1";
+
   /**
    * OpenAI connector ID
    */
@@ -79,6 +90,11 @@ public class CustomAIConnector extends AIConnector {
   
   
   /**
+   * Pattern for reasoning models
+   */
+  private static final Pattern REASONING_MODEL_PATTERN = Pattern.compile("^o[\\d]+");
+  
+  /**
    * @see AIConnector#getParametersList()
    */
   @Override
@@ -90,9 +106,7 @@ public class CustomAIConnector extends AIConnector {
         "Base URL:",
         "The base URL of your OpenAI-compatible API service. "
       + "The connector automatically appends paths such as "
-      + "/chat/completions or /moderations when sending API requests. "
-      + "If the Base URL already contains a path (for example ends with /v1/), "
-      + "no additional version segment is added.")
+      + "/chat/completions or /moderations when sending API requests.")
         .setDefaultValue("https://api.openai.com/v1/"));
 
     
@@ -110,7 +124,22 @@ public class CustomAIConnector extends AIConnector {
         .setInfo("If you do not specify an API key, the environment variables or system properties will be used to authenticate using OAuth Client Credentials Flow.")
         .setExtraInfo(apiKeyExtraInfo));
     
-    params.add(new TextFieldConnectorParam(MODEL_PARAM_ID, "Model:", null).setDefaultValue("gpt-4o"));
+    params.add(new ModelsComboConnectorParam(MODEL_PARAM_ID, "Model:", "Choose the model", new Supplier<List<ModelDescriptor>>() {
+      @Override
+      public List<ModelDescriptor> get() {
+        List<ModelDescriptor> models = new ArrayList<>();
+        models.add(new ModelDescriptor("gpt-5", "GPT 5",  "Latest-generation flagship model designed for complex reasoning and high-accuracy tasks."));
+        models.add(new ModelDescriptor("gpt-5-mini", "GPT-5 Mini",  "Smaller GPT-5 variant optimized for cost and speed while maintaining strong quality for common tasks."));
+        models.add(new ModelDescriptor("gpt-5-nano", "GPT-5 Nano",  "The fastest and most cost-effective GPT-5 variant for lightweight tasks."));
+        
+        models.add(new ModelDescriptor(DEFAULT_MODEL, "GPT 4.1", "Smartest non-reasoning model. It excels at instruction following and tool calling, with broad knowledge across domains.")); 
+        models.add(new ModelDescriptor("gpt-4.1-mini", "GPT-4.1 Mini", "Smaller, faster version of GPT-4.1")); 
+        models.add(new ModelDescriptor("gpt-4.1-nano", "GPT-4.1 Nano", "GPT-4.1 nano is the fastest, most cost-effective GPT-4.1 model")); 
+
+        return models;
+      }
+    }).setDefaultValue(DEFAULT_MODEL));
+    
     
     params.add(new CheckBoxConnectorParam(
         ENABLE_TEXT_MODERATION_PARAM_AI,
@@ -212,10 +241,50 @@ public class CustomAIConnector extends AIConnector {
       if(model != null && !String.valueOf(model).isEmpty()) {
         request.setModel(String.valueOf(model));
       } else {
-        request.setModel("gpt-4o");
+        request.setModel(DEFAULT_MODEL);
       }
     }
-
+    
+    processRequestTakingAccountOfReasoningModel(request);
     return request;
+  }
+  
+  /**
+   * Update the completion request taking account of reasoning properties
+   * 
+   * Some features like the following are not supported by reasoning models
+   * - system message
+   * - temperature
+   * - max tokens
+   * 
+   * Also some parameters are specific to reasoning models and should be excluded for other models
+   * 
+   * @param completionRequest The completion request
+   */
+  private static void processRequestTakingAccountOfReasoningModel(CompletionRequest completionRequest) {
+    String model = completionRequest.getModel();
+    boolean isReasoningModel = model.startsWith("gpt-5") || REASONING_MODEL_PATTERN.matcher(model).find();
+    if(isReasoningModel) {
+      // Translate System message
+      Message message = completionRequest.getMessages().get(0);
+      if(message.getRole() == RoleType.SYSTEM) {
+        completionRequest.getMessages().set(
+            0,
+            new Message(
+                RoleType.DEVELOPER,
+                message.getContent()));
+      }
+      
+      // Currently unsupported API parameters: temperature
+      completionRequest.setTemperature(null);
+      
+      // Max tokens is not supported for reasoning models
+      completionRequest.setMaxTokens(null);
+    } else {
+      // Ignore max_completion_tokens and reasoning_effort on models that are not from o1 family
+      completionRequest.setMaxCompletionTokens(null);
+      completionRequest.setReasoningEffort(null);
+    }
+    
   }
 }

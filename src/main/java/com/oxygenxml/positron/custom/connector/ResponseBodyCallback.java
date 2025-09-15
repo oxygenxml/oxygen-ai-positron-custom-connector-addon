@@ -97,6 +97,12 @@ public class ResponseBodyCallback<T> implements Callback<ResponseBody> {
         String errorMesssage = processHttpException.getMessage();
         if (LOGGER.isDebugEnabled()) {
           LOGGER.debug("\n\tError message is: " + errorMesssage);
+          StringBuilder headersString = new StringBuilder();
+          response.headers().forEach( p -> {
+            headersString.append("\n");
+            headersString.append(p.component1()).append(":").append(p.component2());
+          });
+          LOGGER.debug("\n\t Response headers: {} ", headersString.toString());
         }
         throw new AIConnectionException(errorMesssage, "", processHttpException);
       }
