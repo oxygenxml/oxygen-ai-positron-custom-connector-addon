@@ -1,6 +1,6 @@
 # Oxygen AI Positron Custom Connector
 
-This add-on allows you to connect the Oxygen AI Positron Assistant Enterprise plugin with AI services that expose a REST API, similar to OpenAI's chat-completion API. Unlike the built-in Open AI connector, this add-on supports the OAuth Client Credentials Flow for authentication and gives you more flexibility by letting you set query parameters.
+This add-on allows you to connect the Oxygen AI Positron plugin with AI services that expose a REST API, similar to OpenAI's chat-completion API. Unlike the built-in Open AI connector, this add-on supports the OAuth Client Credentials Flow for authentication and gives you more flexibility by letting you set query parameters.
 
 ## Compatibility
 
@@ -14,14 +14,14 @@ The add-on is compatible with Oxygen XML Editor/Author/Developer version 27.1 or
 4. Read the end-user license agreement. Then select the **I accept all terms of the end-user license agreement** option and click **Finish**.
 5. Restart the application. 
 
-Result: The **Custom AI Service** will be available into the AI Connector combo menu from the "Plugins / Oxygen AI Positron Assistant Enterprise / AI Service Configuration" preferences page of the Oxygen AI Positron Assistant Enterprise add-on.
+Result: The **Custom AI Service** will be available into the AI Connector combo menu from the "Plugins / Oxygen AI Positron / AI Service Configuration" preferences page of the Oxygen AI Positron add-on.
 
 The add-on can also be installed using the following alternative installation procedure:
 1. Go to the [Releases page](https://www.oxygenxml.com/InstData/Addons/default/com/oxygenxml/oxygen-ai-positron-custom-connector-addon) and download the `oxygen-ai-positron-custom-connector-addon-{version}-plugin.jar` file.
 2. Unzip it inside `{oXygenInstallDir}/plugins`. Make sure you don't create any intermediate folders. After unzipping the archive, the file system should look like this: `{oXygenInstallDir}/plugins/oxygen-ai-positron-custom-connector-addon-x.y.z`, and inside this folder, there should be a `plugin.xml`file.
 
 ## How to use
-When the **Custom AI Service** connector is selected in the "AI Service Configuration" preferences page of the Oxygen AI Positron Assistant Enterprise add-on the following options are available to configure the connector: 
+When the **Custom AI Service** connector is selected in the "AI Service Configuration" preferences page of the Oxygen AI Positron add-on the following options are available to configure the connector: 
 
 * Base URL: The base URL of the Custom AI service. The connector automatically appends paths such as */chat/completions* or */moderations* when sending API requests. By default is: https://api.openai.com/v1/
 
