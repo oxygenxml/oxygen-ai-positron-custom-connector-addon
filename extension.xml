@@ -19,6 +19,12 @@
                 <p>${project.description}</p>
             </div>
             <div>
+              <h2>Release Notes 1.1.1</h2>
+                <ol>
+                  <li><b>Model metadata via Positron API</b> – Oxygen AI Positron Custom Connector now exposes detailed model information, including context window size and maximum output tokens.</li>
+                </ol>
+            </div>
+            <div>
               <h2>Release Notes 1.1.0</h2>
                 <ol>
                   <li><b>OpenAI GPT 5 models</b> – You can now select in the Chat view and use for invoking AI actions or for chat the latest OpenAI GPT-5, GPT-5-mini and GPT-5-nano models.</li>
