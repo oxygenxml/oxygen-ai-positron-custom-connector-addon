@@ -5,7 +5,7 @@
     class="com.oxygenxml.positron.custom.connector.plugin.PositronCustomConnectorsPlugin"
     id="oxygen-ai-positron-custom-connector-addon"
     name="Oxygen AI Positron Custom Connector"
-    description="${plugin.description}"
+    description="${project.description}"
     version="${project.nosnapshot.version}"
     vendor="Syncro Soft">
   <runtime>
