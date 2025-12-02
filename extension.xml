@@ -19,6 +19,13 @@
                 <p>${project.description}</p>
             </div>
             <div>
+              <h2>Release Notes 1.1.2</h2>
+                <ol>
+                   <li><b>Compatibility with the deprecated AI Positron Assistant Enterprise add-on</b> 
+                   – The add-on is now fully compatible with the AI Positron Assistant Enterprise add-on, preventing startup issues caused by remnants of the deprecated Enterprise add-on.</li>
+                </ol>
+            </div>
+            <div>
               <h2>Release Notes 1.1.1</h2>
                 <ol>
                   <li><b>Model metadata via Positron API</b> – Oxygen AI Positron Custom Connector now exposes detailed model information, including context window size and maximum output tokens.</li>

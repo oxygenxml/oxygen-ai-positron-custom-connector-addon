@@ -95,6 +95,13 @@ public class CustomAIConnector extends AIConnector {
   private static final Pattern REASONING_MODEL_PATTERN = Pattern.compile("^o[\\d]+");
   
   /**
+   * Flag indicating whether positron-api version 8 or newer is available at runtime.
+   * Version 8 introduced the extended ModelDescriptor constructor with 
+   * contextWindow, maxOutputTokens, and isReasoningModel parameters.
+   */
+  private static final boolean POSITRON_API_V8_OR_NEWER = isPositronApiV8OrNewer();
+  
+  /**
    * @see AIConnector#getParametersList()
    */
   @Override
@@ -128,21 +135,21 @@ public class CustomAIConnector extends AIConnector {
       @Override
       public List<ModelDescriptor> get() {
         List<ModelDescriptor> models = new ArrayList<>();
-        models.add(new ModelDescriptor(
+        models.add(createModelDescriptor(
             "gpt-5",
             "GPT 5",
             "Latest-generation flagship model designed for complex reasoning and high-accuracy tasks.",
             400000,
             128000,
             true));
-        models.add(new ModelDescriptor(
+        models.add(createModelDescriptor(
             "gpt-5-mini",
             "GPT-5 Mini", 
             "Smaller GPT-5 variant optimized for cost and speed while maintaining strong quality for common tasks.",
             400000,
             128000,
             true));
-        models.add(new ModelDescriptor(
+        models.add(createModelDescriptor(
             "gpt-5-nano",
             "GPT-5 Nano",
             "The fastest and most cost-effective GPT-5 variant for lightweight tasks.",
@@ -150,21 +157,21 @@ public class CustomAIConnector extends AIConnector {
             128000,
             true));
         
-        models.add(new ModelDescriptor(
+        models.add(createModelDescriptor(
             DEFAULT_MODEL,
             "GPT 4.1",
             "Smartest non-reasoning model. It excels at instruction following and tool calling, with broad knowledge across domains.",
             1000000, 
             32768,
             false)); 
-        models.add(new ModelDescriptor(
+        models.add(createModelDescriptor(
             "gpt-4.1-mini", 
             "GPT-4.1 Mini", 
             "Smaller, faster version of GPT-4.1", 
             200000,
             32768, 
             false)); 
-        models.add(new ModelDescriptor(
+        models.add(createModelDescriptor(
             "gpt-4.1-nano",
             "GPT-4.1 Nano",
             "GPT-4.1 nano is the fastest, most cost-effective GPT-4.1 model",
@@ -322,5 +329,48 @@ public class CustomAIConnector extends AIConnector {
       completionRequest.setReasoningEffort(null);
     }
     
+  }
+  
+  /**
+   * Check if positron-api version 8 or newer is available at runtime.
+   * This version introduced the extended ModelDescriptor constructor.
+   * 
+   * @return <code>true</code> if positron-api v8+ is available
+   */
+  private static boolean isPositronApiV8OrNewer() {
+    try {
+      ModelDescriptor.class.getConstructor(
+          String.class, String.class, String.class, int.class, int.class, boolean.class);
+      return true;
+    } catch (NoSuchMethodException e) {
+      return false;
+    }
+  }
+  
+  /**
+   * Create a ModelDescriptor using the appropriate constructor based on runtime availability.
+   * If the extended constructor is available, it will be used with all parameters.
+   * Otherwise, the legacy constructor with only id, name, and description will be used.
+   * 
+   * @param id              The model identifier
+   * @param name            The display name
+   * @param description     The model description
+   * @param contextWindow   The context window size (used only if extended constructor is available)
+   * @param maxOutputTokens The maximum output tokens (used only if extended constructor is available)
+   * @param isReasoningModel Whether this is a reasoning model (used only if extended constructor is available)
+   * 
+   * @return A new ModelDescriptor instance
+   */
+  private static ModelDescriptor createModelDescriptor(
+      String id, 
+      String name, 
+      String description,
+      int contextWindow, 
+      int maxOutputTokens, 
+      boolean isReasoningModel) {
+    if (POSITRON_API_V8_OR_NEWER) {
+      return new ModelDescriptor(id, name, description, contextWindow, maxOutputTokens, isReasoningModel);
+    }
+    return new ModelDescriptor(id, name, description);
   }
 }
