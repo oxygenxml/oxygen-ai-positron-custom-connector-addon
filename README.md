@@ -14,14 +14,14 @@ The add-on is compatible with Oxygen XML Editor/Author/Developer version 27.1 or
 4. Read the end-user license agreement. Then select the **I accept all terms of the end-user license agreement** option and click **Finish**.
 5. Restart the application. 
 
-Result:  The **Connections** table on the "Plugins / Oxygen AI Positron / AI Service Configuration" preferences page is extended with a **Custom AI Service** connector type that you can use when creating a new connection.
+Result:  The **Connections** table in the "Plugins / Oxygen AI Positron / AI Service Configuration" preferences page is extended with a **Custom AI Service** connector type that you can use when creating a new connection.
 
 The add-on can also be installed using the following alternative installation procedure:
 1. Go to the [Releases page](https://www.oxygenxml.com/InstData/Addons/default/com/oxygenxml/oxygen-ai-positron-custom-connector-addon) and download the `oxygen-ai-positron-custom-connector-addon-{version}-plugin.jar` file.
 2. Unzip it inside `{oXygenInstallDir}/plugins`. Make sure you don't create any intermediate folders. After unzipping the archive, the file system should look like this: `{oXygenInstallDir}/plugins/oxygen-ai-positron-custom-connector-addon-x.y.z`, and inside this folder, there should be a `plugin.xml`file.
 
 ## How to use
-To configure a **Custom AI Service** connection, open the **AI Service Configuration** preferences page and click **Add** in the **Connections** table. In the **Add Connection** dialog, select **Custom AI Service** from the **Connector type** combo box. The following configuration options are available: 
+To configure a **Custom AI Service** connection, open the **AI Service Configuration** preferences page and click **Add** in the **Connections** table. In the **Add Connection** dialog box, select **Custom AI Service** from the **Connector type** combo box. The following configuration options are available: 
 
 * Base URL: The base URL of the Custom AI service. The connector automatically appends paths such as */chat/completions* or */moderations* when sending API requests. By default is: https://api.openai.com/v1/
 
