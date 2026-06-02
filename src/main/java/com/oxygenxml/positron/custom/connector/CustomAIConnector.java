@@ -17,7 +17,6 @@ package com.oxygenxml.positron.custom.connector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import com.oxygenxml.positron.api.connector.AIConnector;
@@ -32,6 +31,7 @@ import com.oxygenxml.positron.api.connector.param.CheckBoxConnectorParam;
 import com.oxygenxml.positron.api.connector.param.ConnectorParamBase;
 import com.oxygenxml.positron.api.connector.param.KeyValueTableConnectorParam;
 import com.oxygenxml.positron.api.connector.param.ModelsComboConnectorParam;
+import com.oxygenxml.positron.api.connector.param.ModelsTableConnectorParam;
 import com.oxygenxml.positron.api.connector.param.PasswordTextFieldConnectorParam;
 import com.oxygenxml.positron.api.connector.param.TextFieldConnectorParam;
 import com.oxygenxml.positron.custom.connector.auth.AccessTokenProvider;
@@ -77,6 +77,11 @@ public class CustomAIConnector extends AIConnector {
    * The parameter identifier for the AI model
    */
   public static final String MODEL_PARAM_ID = "model_param";
+
+  /**
+   * The parameter identifier for the admin-curated models table.
+   */
+  public static final String MODELS_TABLE_PARAM_ID = "models_table_param";
   
   /**
    * The parameter identifier for enabling text moderation
@@ -131,59 +136,18 @@ public class CustomAIConnector extends AIConnector {
         .setInfo("If you do not specify an API key, the environment variables or system properties will be used to authenticate using OAuth Client Credentials Flow.")
         .setExtraInfo(apiKeyExtraInfo));
     
-    params.add(new ModelsComboConnectorParam(MODEL_PARAM_ID, "Model:", "Choose the model", new Supplier<List<ModelDescriptor>>() {
-      @Override
-      public List<ModelDescriptor> get() {
-        List<ModelDescriptor> models = new ArrayList<>();
-        models.add(createModelDescriptor(
-            "gpt-5",
-            "GPT 5",
-            "Latest-generation flagship model designed for complex reasoning and high-accuracy tasks.",
-            400000,
-            128000,
-            true));
-        models.add(createModelDescriptor(
-            "gpt-5-mini",
-            "GPT-5 Mini", 
-            "Smaller GPT-5 variant optimized for cost and speed while maintaining strong quality for common tasks.",
-            400000,
-            128000,
-            true));
-        models.add(createModelDescriptor(
-            "gpt-5-nano",
-            "GPT-5 Nano",
-            "The fastest and most cost-effective GPT-5 variant for lightweight tasks.",
-            400000,
-            128000,
-            true));
-        
-        models.add(createModelDescriptor(
-            DEFAULT_MODEL,
-            "GPT 4.1",
-            "Smartest non-reasoning model. It excels at instruction following and tool calling, with broad knowledge across domains.",
-            1000000, 
-            32768,
-            false)); 
-        models.add(createModelDescriptor(
-            "gpt-4.1-mini", 
-            "GPT-4.1 Mini", 
-            "Smaller, faster version of GPT-4.1", 
-            200000,
-            32768, 
-            false)); 
-        models.add(createModelDescriptor(
-            "gpt-4.1-nano",
-            "GPT-4.1 Nano",
-            "GPT-4.1 nano is the fastest, most cost-effective GPT-4.1 model",
-            1047576, 
-            32768, 
-            false)); 
+    params.add(new ModelsComboConnectorParam(MODEL_PARAM_ID, "Model:", "Choose the model",
+        CustomAIConnector::createDefaultModels).setDefaultValue(DEFAULT_MODEL));
 
-        return models;
-      }
-    }).setDefaultValue(DEFAULT_MODEL));
-    
-    
+    // Admin-curated list of models exposed to end-users in the Web Author / Content Fusion picker.
+    // Seeded with the same predefined models as the combo; admins can add custom entries.
+    params.add(new ModelsTableConnectorParam(
+        MODELS_TABLE_PARAM_ID,
+        "Manage Models:",
+        "Manage the list of AI models available to users for this connector.",
+        CustomAIConnector::createDefaultModels));
+
+
     params.add(new CheckBoxConnectorParam(
         ENABLE_TEXT_MODERATION_PARAM_AI,
         "Enable text moderation",
@@ -332,6 +296,67 @@ public class CustomAIConnector extends AIConnector {
   }
   
   /**
+   * Builds the predefined list of models exposed by this connector. Shared by the model combo box
+   * and the admin-curated models table so both stay in sync.
+   *
+   * @return The list of predefined {@link ModelDescriptor}s.
+   */
+  private static List<ModelDescriptor> createDefaultModels() {
+    List<ModelDescriptor> models = new ArrayList<>();
+    models.add(createModelDescriptor(
+        "gpt-5",
+        "GPT 5",
+        "Latest-generation flagship model designed for complex reasoning and high-accuracy tasks.",
+        400000,
+        null,
+        128000,
+        true));
+    models.add(createModelDescriptor(
+        "gpt-5-mini",
+        "GPT-5 Mini",
+        "Smaller GPT-5 variant optimized for cost and speed while maintaining strong quality for common tasks.",
+        400000,
+        null,
+        128000,
+        true));
+    models.add(createModelDescriptor(
+        "gpt-5-nano",
+        "GPT-5 Nano",
+        "The fastest and most cost-effective GPT-5 variant for lightweight tasks.",
+        400000,
+        null,
+        128000,
+        true));
+
+    models.add(createModelDescriptor(
+        DEFAULT_MODEL,
+        "GPT 4.1",
+        "Smartest non-reasoning model. It excels at instruction following and tool calling, with broad knowledge across domains.",
+        1000000,
+        null,
+        32768,
+        false));
+    models.add(createModelDescriptor(
+        "gpt-4.1-mini",
+        "GPT-4.1 Mini",
+        "Smaller, faster version of GPT-4.1",
+        200000,
+        null,
+        32768,
+        false));
+    models.add(createModelDescriptor(
+        "gpt-4.1-nano",
+        "GPT-4.1 Nano",
+        "GPT-4.1 nano is the fastest, most cost-effective GPT-4.1 model",
+        1047576,
+        null,
+        32768,
+        false));
+
+    return models;
+  }
+
+  /**
    * Check if positron-api version 8 or newer is available at runtime.
    * This version introduced the extended ModelDescriptor constructor.
    * 
@@ -355,21 +380,23 @@ public class CustomAIConnector extends AIConnector {
    * @param id              The model identifier
    * @param name            The display name
    * @param description     The model description
-   * @param contextWindow   The context window size (used only if extended constructor is available)
-   * @param maxOutputTokens The maximum output tokens (used only if extended constructor is available)
+   * @param contextWindow    The context window size (used only if extended constructor is available)
+   * @param maxInputTokens   The maximum input tokens (nullable, used only if extended constructor is available)
+   * @param maxOutputTokens  The maximum output tokens (used only if extended constructor is available)
    * @param isReasoningModel Whether this is a reasoning model (used only if extended constructor is available)
    * 
    * @return A new ModelDescriptor instance
    */
   private static ModelDescriptor createModelDescriptor(
-      String id, 
-      String name, 
+      String id,
+      String name,
       String description,
-      int contextWindow, 
-      int maxOutputTokens, 
+      int contextWindow,
+      Integer maxInputTokens,
+      int maxOutputTokens,
       boolean isReasoningModel) {
     if (POSITRON_API_V8_OR_NEWER) {
-      return new ModelDescriptor(id, name, description, contextWindow, maxOutputTokens, isReasoningModel);
+      return new ModelDescriptor(id, name, description, contextWindow, maxInputTokens, maxOutputTokens, isReasoningModel);
     }
     return new ModelDescriptor(id, name, description);
   }
