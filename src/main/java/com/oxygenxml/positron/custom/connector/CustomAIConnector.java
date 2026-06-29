@@ -74,11 +74,6 @@ public class CustomAIConnector extends AIConnector {
   public static final String EXTRA_QUERY_PARAM_ID = "extra_query_params";
   
   /**
-   * The parameter identifier for the AI model
-   */
-  public static final String MODEL_PARAM_ID = "model_param";
-
-  /**
    * The parameter identifier for the admin-curated models table.
    */
   public static final String MODELS_TABLE_PARAM_ID = "models_table_param";
@@ -136,9 +131,6 @@ public class CustomAIConnector extends AIConnector {
         .setInfo("If you do not specify an API key, the environment variables or system properties will be used to authenticate using OAuth Client Credentials Flow.")
         .setExtraInfo(apiKeyExtraInfo));
     
-    params.add(new ModelsComboConnectorParam(MODEL_PARAM_ID, "Model:", "Choose the model",
-        CustomAIConnector::createDefaultModels).setDefaultValue(DEFAULT_MODEL));
-
     // Admin-curated list of models exposed to end-users in the Web Author / Content Fusion picker.
     // Seeded with the same predefined models as the combo; admins can add custom entries.
     params.add(new ModelsTableConnectorParam(
@@ -240,16 +232,6 @@ public class CustomAIConnector extends AIConnector {
         String.valueOf(getResolvedParameters().get(ALLOW_STREAMING_PARAM_ID)));
     if(request.getStream() != null && request.getStream().booleanValue() && !isStreamingAllowed) {
       request.setStream(false);
-    }
-
-    Map<String, Object> resolvedParameters = getResolvedParameters();
-    if(request.getModel() == null) {
-      Object model = resolvedParameters.get(MODEL_PARAM_ID);
-      if(model != null && !String.valueOf(model).isEmpty()) {
-        request.setModel(String.valueOf(model));
-      } else {
-        request.setModel(DEFAULT_MODEL);
-      }
     }
     
     processRequestTakingAccountOfReasoningModel(request);
