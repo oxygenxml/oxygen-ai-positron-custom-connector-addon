@@ -30,7 +30,6 @@ import com.oxygenxml.positron.api.connector.dto.RoleType;
 import com.oxygenxml.positron.api.connector.param.CheckBoxConnectorParam;
 import com.oxygenxml.positron.api.connector.param.ConnectorParamBase;
 import com.oxygenxml.positron.api.connector.param.KeyValueTableConnectorParam;
-import com.oxygenxml.positron.api.connector.param.ModelsComboConnectorParam;
 import com.oxygenxml.positron.api.connector.param.ModelsTableConnectorParam;
 import com.oxygenxml.positron.api.connector.param.PasswordTextFieldConnectorParam;
 import com.oxygenxml.positron.api.connector.param.TextFieldConnectorParam;
