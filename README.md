@@ -95,6 +95,23 @@ params.add(new ModelsComboConnectorParam(MODEL_PARAM_ID, "Model:", "Choose the m
 }).setDefaultValue("gpt-5"));
 ```
 
+### Reasoning / thinking content (`CompletionMessage.reasoning`)
+
+If your AI service returns reasoning or extended-thinking content alongside the response, populate the `reasoning` field on each `CompletionMessage` with a `CompletionReasoningContent` object:
+
+- **`text`** — the (partial) reasoning text received in the chunk. During streaming, the full reasoning is obtained by concatenating `text` across all chunks.
+- **`signature`** — an opaque token used to verify the integrity of the thinking block (e.g. Claude's encrypted thinking-block signature). Leave `null` if your service does not provide one.
+
+```java
+CompletionMessage message = new CompletionMessage();
+message.setReasoning(new CompletionReasoningContent(reasoningText, signature));
+```
+
+When building the message list for follow-up requests, be aware that assistant messages in the conversation history may contain `MessageReasoningContent` items (type `REASONING`) alongside regular text content. These represent reasoning blocks produced in a previous turn that must be forwarded back to the AI service.
+
+In this sample connector `getCompletionFlux` sends the `CompletionRequest` as-is to the AI backend (works for services that accept the Positron DTO format directly). If your connector maps the request to a provider-specific format, iterate over each message's content list and translate any `MessageReasoningContent` block into whatever representation your AI service expects (e.g. a `thinking` block for Claude, or any equivalent construct for your provider).
+
+
 Copyright and License
 ---------------------
 Copyright 2025 Syncro Soft SRL.

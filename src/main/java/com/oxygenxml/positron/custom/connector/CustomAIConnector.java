@@ -45,7 +45,7 @@ public class CustomAIConnector extends AIConnector {
   /**
    * The default model
    */
-  private static final String DEFAULT_MODEL = "gpt-4.1";
+  private static final String DEFAULT_MODEL = "gpt-5.4";
 
   /**
    * OpenAI connector ID
@@ -285,53 +285,37 @@ public class CustomAIConnector extends AIConnector {
   private static List<ModelDescriptor> createDefaultModels() {
     List<ModelDescriptor> models = new ArrayList<>();
     models.add(createModelDescriptor(
-        "gpt-5",
-        "GPT 5",
-        "Latest-generation flagship model designed for complex reasoning and high-accuracy tasks.",
-        400000,
-        null,
-        128000,
-        true));
-    models.add(createModelDescriptor(
-        "gpt-5-mini",
-        "GPT-5 Mini",
-        "Smaller GPT-5 variant optimized for cost and speed while maintaining strong quality for common tasks.",
-        400000,
-        null,
-        128000,
-        true));
-    models.add(createModelDescriptor(
-        "gpt-5-nano",
-        "GPT-5 Nano",
-        "The fastest and most cost-effective GPT-5 variant for lightweight tasks.",
-        400000,
-        null,
+        "gpt-5.5",
+        "GPT-5.5 Thinking",
+        "OpenAI's most capable frontier model with extended thinking for coding, complex reasoning, and professional workflows. Uses deep reasoning to tackle the most demanding agentic tasks.",
+        1050000,
+        922000,
         128000,
         true));
 
     models.add(createModelDescriptor(
         DEFAULT_MODEL,
-        "GPT 4.1",
-        "Smartest non-reasoning model. It excels at instruction following and tool calling, with broad knowledge across domains.",
-        1000000,
-        null,
-        32768,
+        "GPT-5.4",
+        "OpenAI frontier model for agentic, coding, and complex professional workflows.",
+        1050000,
+        922000,
+        128000,
         false));
     models.add(createModelDescriptor(
-        "gpt-4.1-mini",
-        "GPT-4.1 Mini",
-        "Smaller, faster version of GPT-4.1",
-        200000,
-        null,
-        32768,
+        "gpt-5.4-mini",
+        "GPT-5.4 Mini",
+        "Efficient model for high-volume workloads. Good for coding, computer use, and sub-agent tasks with a strong cost-to-performance ratio.",
+        400000,
+        272000,
+        128000,
         false));
     models.add(createModelDescriptor(
-        "gpt-4.1-nano",
-        "GPT-4.1 Nano",
-        "GPT-4.1 nano is the fastest, most cost-effective GPT-4.1 model",
-        1047576,
-        null,
-        32768,
+        "gpt-5.4-nano",
+        "GPT-5.4 Nano",
+        "Most cost-efficient GPT-5.4-class model optimized for speed and high-volume simple tasks. Ideal for classification, data extraction, ranking, and sub-agent workflows.",
+        400000,
+        272000,
+        128000,
         false));
 
     return models;
